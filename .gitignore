@@ -1,0 +1,12 @@
+# Skompilowane pliki i buildy
+target/
+*.class
+*.jar
+*.war
+
+# Logi
+*.log
+
+# Pliki systemowe
+.DS_Store
+Thumbs.db

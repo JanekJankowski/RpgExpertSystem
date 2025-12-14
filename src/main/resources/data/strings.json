@@ -1,0 +1,124 @@
+{
+  "q_start_genre": "Which genre interests you?",
+  "opt_medieval_fantasy": "Medieval Fantasy",
+  "opt_other_AH": "Other Alternate History",
+  "opt_supers": "Supers",
+  "opt_near_present": "Genres related to near present",
+  "opt_far_future": "Far Future",
+  "opt_genre_doesnt_matter": "Genre Shouldn't Matter",
+  
+  "q_supers_start": "Based on real comics?",
+  "opt_marvel": "Marvel",
+  "opt_DC": "DC",
+  "opt_no_other": "No or other",
+  
+  "q_marvel": "Want a diceless system or one with lots of online fantasies?",
+  "opt_cards": "Cards",
+  "opt_online_fantasies": "Online Fantasies",
+  "opt_diceless": "Diceless",
+  
+  "rec_marvel_saga": "Marvel SAGA",
+  "rec_marvel_universe": "Marvel Universe",
+  "rec_marvel_sh": "Marvel Super Heroes (FASERIP)",
+  
+  "q_dc_style": "Exponential scale, D6 pool or heavily modified D&D attributes?",
+  "opt_dc_exp": "Exponential scale",
+  "opt_dc_d20": "Modified D20",
+  "opt_dc_d6": "D6 Pool",
+
+  "rec_dc_heroes": "DC Heroes",
+  "rec_dc_adventures": "DC Adventures",
+  "rec_dc_universe": "DC Universe",
+
+  "q_supers_other": "Do you like d20? (skills, feats, etc.)",
+  "opt_yes": "YES",
+  "opt_no": "NO",
+  
+  "q_supers_point_buy": "Do you like point buy character gen?",
+  "opt_pointbuy_yes": "YES",
+  "opt_fractions": "YES, with fractions!",
+  "opt_not_really": "Not really",
+  "opt_super_rules": "The rules don't even need balancing...",
+
+  "rec_champions": "Champions",
+  "rec_mutants_masterminds": "Mutants & Masterminds",
+  "rec_gurps_supers": "GURPS Supers",
+  "rec_icons": "ICONS",
+  "rec_heroes_unlimited": "Heroes Unlimited",
+  
+  "q_ah_start": "FATE based, d20 based or neither?",
+  "opt_ah_fate": "FATE",
+  "opt_ah_d20": "D20",
+  "opt_ah_neither": "Neither",
+  
+  "q_supernatural_pulp": "Supernatural or Pulp?",
+  "opt_ah_supernatural": "Supernatural",
+  "opt_ah_pulp": "Pulp",
+  
+  "q_ah_subgenre": "Pick a subgenre",
+  "opt_ah_genre_mobsters": "Mobsters 1930s",
+  "opt_ah_genre_pulp": "Pulp",
+  "opt_ah_genre_action": "Action/Mixed",
+  "opt_ah_genre_jap": "Japanese/Samurai",
+  
+  "rec_dresden": "Dresden Files",
+  "rec_spirit": "Spirit of the Century",
+  "rec_hollow": "Hollow Earth Expedition",
+  "rec_bushido": "Bushido",
+  "rec_fengshui": "Feng Shui",
+  "rec_d20": "D20 Past",
+  "rec_gangbusters": "Gangbusters",
+  
+  "q_dm_really": "Really?",
+  "opt_yes_really": "YES",
+  "opt_no_not_really": "No, not really",
+  
+  "q_dm_whats": "What is du/dx=cu+xy?",
+  "opt_dm_huh": "Huh?",
+  "opt_dm_equation": "A differential equation",
+  "opt_dm_should_be": "It should be +x not +xy",
+  
+  "q_dm_open_license": "Want a game with an open license?",
+  "opt_dm_dm": "Doesn't matter",
+  "opt_dm_license_yes": "Yes",
+  "opt_dm_license_no": "No",
+  
+  "q_dm_license_really": "Really?",
+  "opt_dm_sorta": "Sorta",
+  "opt_dm_facist": "A facist could make it for all I care",
+  
+  "q_dm_scifi": "Maybe you want sci-fi licensed games?",
+  "opt_dm_scifi_yes_phd": "Yes, and I have a PhD in Math or CS",
+  "opt_dm_scifi_yes": "Yes",
+  "opt_dm_scifi_no": "No",
+  
+  "q_dm_cinematic": "Want one that is 'cinematic' or has a bit of humor?",
+  "opt_dm_cinematic_no": "No",
+  "opt_dm_humor": "Humor",
+  "opt_dm_cinematic": "Cinematic",
+  
+  "q_dm_niche": "Have a niche genre in mind?",
+  "opt_dm_niche_yes": "Yes",
+  "opt_dm_sh": "Super heroes",
+  "opt_dm_supernatural_pulp": "Supernatural or pulp",
+  
+  "q_dm_aspects": "Like Aspects?",
+  "opt_aspects_yes": "Yes",
+  "opt_aspects_no": "No",
+  
+  "q_dm_open_ended": "Open-ended rolls/Acting?",
+  "opt_open_ended_yes": "Yes",
+  "opt_open_ended_no": "No",
+  
+  "rec_hero": "HERO",
+  "rec_gurps": "GURPS",
+  "rec_torg": "TORG",
+  "rec_rifts": "RIFTS",
+  "rec_savage_worlds": "Savage Worlds",
+  "rec_basic": "Basic Role Playing",
+  "rec_cortex": "Cortex",
+  "rec_risus": "Risus",
+  "rec_opend6": "Open d6",
+  "rec_fate": "FATE",
+  "rec_fudge": "FUDGE",
+}

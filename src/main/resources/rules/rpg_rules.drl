@@ -1,0 +1,579 @@
+package rules
+
+import java.util.List
+import java.util.ArrayList
+
+declare Question
+    id : String				// ID pytania dla regu³
+    textKey : String		// pytanie z JSON
+    type : String			// "SINGLE" lub "MULTI" (radio vs checkbox)
+    options : List			// odpowiedz z JSON
+    optionIds : List		// ID odpowiedzi dla regu³
+end
+
+declare UserAnswer
+    questionId : String		// ID pytania
+    selectedOptions : List	// wybrane odpowiedzi
+end
+
+declare Recommendation	
+    systemKey : String		// rekomendacja z JSON
+end
+
+// --- REGU£Y ---
+
+rule "Init - Start Process"
+when
+    not UserAnswer() 
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_medieval_fantasy");
+    opts.add("opt_other_AH");
+    opts.add("opt_supers");
+    opts.add("opt_near_present");
+    opts.add("opt_far_future");
+    opts.add("opt_genre_doesnt_matter");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("MF");
+    ids.add("AH");
+    ids.add("SUPERS");
+    ids.add("NEAR_PRESENT");
+    ids.add("FAR_FUTURE");
+    ids.add("GENRE_ANY");
+
+    insert(new Question("Q_GENRE", "q_start_genre", "MULTI", opts, ids));
+end
+
+// =========================================
+// ŒCIE¯KA: SUPERS
+// =========================================
+
+rule "Supers - start"
+when
+    UserAnswer(questionId == "Q_GENRE", selectedOptions contains "SUPERS")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_marvel");
+    opts.add("opt_DC");
+    opts.add("opt_no_other");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("MARVEL");
+    ids.add("DC");
+    ids.add("NO_OTHER");
+    insert(new Question("Q_SUPERS_START", "q_supers_start", "MULTI", opts, ids));
+end
+
+// =========================================
+// ŒCIE¯KA: Marvel COMICS
+// =========================================
+
+rule "Supers - Marvel"
+when
+    UserAnswer(questionId == "Q_SUPERS_START", selectedOptions contains "MARVEL")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_cards");
+    opts.add("opt_diceless");
+    opts.add("opt_online_fantasies");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("M_CARDS");
+    ids.add("M_DICELESS");
+    ids.add("M_ONLINE_FANTASIES");
+    insert(new Question("Q_MARVEL", "q_supers_start", "MULTI", opts, ids));
+end
+
+rule "Marvel - cards"
+when
+    UserAnswer(questionId == "Q_MARVEL", selectedOptions contains "M_CARDS")
+then
+    insert(new Recommendation("rec_marvel_saga"));
+end
+
+rule "Marvel - diceless"
+when
+    UserAnswer(questionId == "Q_MARVEL", selectedOptions contains "M_DICELESS")
+then
+    insert(new Recommendation("rec_marvel_universe"));
+end
+
+rule "Marvel - online fantasies"
+when
+    UserAnswer(questionId == "Q_MARVEL", selectedOptions contains "M_ONLINE_FANTASIES")
+then
+    insert(new Recommendation("rec_marvel_sh"));
+end
+
+// =========================================
+// ŒCIE¯KA: DC COMICS
+// =========================================
+
+rule "Supers - DC Start"
+when
+    UserAnswer(questionId == "Q_SUPERS_START", selectedOptions contains "DC")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_dc_exp");
+    opts.add("opt_dc_d20");
+    opts.add("opt_dc_d6");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("DC_EXP");
+    ids.add("DC_D20");
+    ids.add("DC_D6");
+
+    insert(new Question("Q_DC_STYLE", "q_dc_style", "MULTI", opts, ids));
+end
+
+rule "DC - EXP"
+when
+    UserAnswer(questionId == "Q_DC_STYLE", selectedOptions contains "DC_EXP")
+then
+    insert(new Recommendation("rec_dc_heroes"));
+end
+
+rule "DC - D20"
+when
+    UserAnswer(questionId == "Q_DC_STYLE", selectedOptions contains "DC_D20")
+then
+    insert(new Recommendation("rec_dc_adventures"));
+end
+
+rule "DC - D6"
+when
+    UserAnswer(questionId == "Q_DC_STYLE", selectedOptions contains "DC_D6")
+then
+    insert(new Recommendation("rec_dc_universe"));
+end
+
+
+// =========================================
+// ŒCIE¯KA: INNE / W£ASNE (NO / OTHER)
+// =========================================
+
+rule "Supers - Other Start"
+when
+    UserAnswer(questionId == "Q_SUPERS_START", selectedOptions contains "NO_OTHER")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_yes");
+    opts.add("opt_no");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("SUPER_OTHER_YES");
+    ids.add("SUPER_OTHER_NO");
+
+    insert(new Question("Q_SUPERS_OTHER", "q_supers_other", "SINGLE", opts, ids));
+end
+
+rule "Supers - Other - No"
+when
+    UserAnswer(questionId == "Q_SUPERS_OTHER", selectedOptions contains "SUPER_OTHER_NO")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_pointbuy_yes");
+    opts.add("opt_fractions");
+    opts.add("opt_not_really");
+    opts.add("opt_super_rules");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("SUPER_POINTBUY_YES");
+    ids.add("SUPER_POINTBUY_FRACTIONS");
+    ids.add("SUPER_POINTBUY_NO");
+    ids.add("SUPER_POINTBUY_RULES");
+
+    insert(new Question("Q_SUPERS_POINTBUY", "q_supers_point_buy", "SINGLE", opts, ids));
+end
+
+rule "Supers - Mutants"
+when
+    UserAnswer(questionId == "Q_SUPERS_OTHER", selectedOptions contains "SUPER_OTHER_YES")
+then
+    insert(new Recommendation("rec_mutants_masterminds"));
+end
+
+rule "Supers - Heroes Unlimited"
+when
+    UserAnswer(questionId == "Q_SUPERS_POINTBUY", selectedOptions contains "SUPER_POINTBUY_RULES")
+then
+    insert(new Recommendation("rec_heroes_unlimited"));
+end
+
+rule "Supers - ICONS"
+when
+	(
+	    UserAnswer(questionId == "Q_SUPERS_POINTBUY", selectedOptions contains "SUPER_POINTBUY_NO")
+	    or
+	    UserAnswer(questionId == "Q_DM_NICHE", selectedOptions contains "DM_NICHE_SH")
+	)
+	not Recommendation(systemKey == "rec_icons")
+then
+    insert(new Recommendation("rec_icons"));
+end
+
+rule "Supers - GURPS"
+when
+    UserAnswer(questionId == "Q_SUPERS_POINTBUY", selectedOptions contains "SUPER_POINTBUY_FRACTIONS")
+then
+    insert(new Recommendation("rec_gurps_supers"));
+end
+
+rule "Supers - Champions"
+when
+    UserAnswer(questionId == "Q_SUPERS_POINTBUY", selectedOptions contains "SUPER_POINTBUY_YES")
+then
+    insert(new Recommendation("rec_champions"));
+end
+
+// =========================================
+// ŒCIE¯KA: ALT HISTORY
+// =========================================
+
+rule "AH - start"
+when
+    UserAnswer(questionId == "Q_GENRE", selectedOptions contains "AH")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_ah_fate");
+    opts.add("opt_ah_d20");
+    opts.add("opt_ah_neither");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("AH_FATE");
+    ids.add("AH_D20");
+    ids.add("AH_NEITHER");
+    insert(new Question("Q_AH_START", "q_ahs_start", "MULTI", opts, ids));
+end
+
+rule "AH - SUPERNATURAL OR PULP"
+when
+    (
+        UserAnswer(questionId == "Q_AH_START", selectedOptions contains "AH_FATE")
+        or
+        UserAnswer(questionId == "Q_DM_NICHE", selectedOptions contains "DM_NICHE_SUPER_PULP")
+    )
+    not Question(id == "Q_AH_FATE")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_ah_supernatural");
+    opts.add("opt_ah_pulp");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("AH_SUPERNATURAL");
+    ids.add("AH_PULP");
+    insert(new Question("Q_AH_FATE", "q_supernatural_pulp", "MULTI", opts, ids));
+end
+
+rule "AH - subgenre"
+when
+    UserAnswer(questionId == "Q_AH_START", selectedOptions contains "AH_NEITHER")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_ah_genre_mobsters");
+    opts.add("opt_ah_genre_pulp");
+    opts.add("opt_ah_genre_action");
+    opts.add("opt_ah_genre_jap");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("AH_GENRE_MOBSTERS");
+    ids.add("AH_GENRE_PULP");
+    ids.add("AH_GENRE_ACTION");
+    ids.add("AH_GENRE_JAP");
+    insert(new Question("Q_AH_SUBGENRE", "q_ah_subgenre", "MULTI", opts, ids));
+end
+
+rule "AH - Dresden"
+when
+    UserAnswer(questionId == "Q_AH_FATE", selectedOptions contains "AH_SUPERNATURAL")
+then
+    insert(new Recommendation("rec_dresden"));
+end
+
+rule "AH - Spirit"
+when
+    UserAnswer(questionId == "Q_AH_FATE", selectedOptions contains "AH_PULP")
+then
+    insert(new Recommendation("rec_spirit"));
+end
+
+rule "AH - Hollow"
+when
+    UserAnswer(questionId == "Q_AH_SUBGENRE", selectedOptions contains "AH_GENRE_PULP")
+then
+    insert(new Recommendation("rec_hollow"));
+end
+
+rule "AH - Bushido"
+when
+    UserAnswer(questionId == "Q_AH_SUBGENRE", selectedOptions contains "AH_GENRE_JAP")
+then
+    insert(new Recommendation("rec_bushido"));
+end
+
+rule "AH - Ganbusters"
+when
+    UserAnswer(questionId == "Q_AH_SUBGENRE", selectedOptions contains "AH_GENRE_MOBSTERS")
+then
+    insert(new Recommendation("rec_gangbusters"));
+end
+
+rule "AH - Feng Shui"
+when
+    UserAnswer(questionId == "Q_AH_SUBGENRE", selectedOptions contains "AH_GENRE_ACTION")
+then
+    insert(new Recommendation("rec_fengshui"));
+end
+
+rule "AH - D20"
+when
+    UserAnswer(questionId == "Q_AH_START", selectedOptions contains "AH_D20")
+then
+    insert(new Recommendation("rec_d20"));
+end
+
+// =========================================
+// ŒCIE¯KA: Genre Shoudn't Matter
+// =========================================
+
+rule "Genre Doesn't Matter - start"
+when
+    UserAnswer(questionId == "Q_GENRE", selectedOptions contains "GENRE_ANY")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_yes_really");
+    opts.add("opt_no_not_really");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("DM_REALLY_YES");
+    ids.add("DM_NOT_REALLY");
+    insert(new Question("Q_DM_REALLY", "q_dm_really", "SINGLE", opts, ids));
+end
+
+rule "Really? - No"
+when
+    UserAnswer(questionId == "Q_DM_REALLY", selectedOptions contains "DM_NOT_REALLY")
+    $ans : UserAnswer(questionId == "Q_GENRE", selectedOptions contains "GENRE_ANY", selectedOptions.size() == 1)
+then
+	delete($ans);
+    ArrayList opts = new ArrayList();
+    opts.add("opt_medieval_fantasy");
+    opts.add("opt_other_AH");
+    opts.add("opt_supers");
+    opts.add("opt_near_present");
+    opts.add("opt_far_future");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("MF");
+    ids.add("AH");
+    ids.add("SUPERS");
+    ids.add("NEAR_PRESENT");
+    ids.add("FAR_FUTURE");
+
+    insert(new Question("Q_GENRE", "q_start_genre", "MULTI", opts, ids));
+end
+
+rule "Genre Doesn't Matter - equation"
+when
+    UserAnswer(questionId == "Q_DM_REALLY", selectedOptions contains "DM_REALLY_YES")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_dm_huh");
+    opts.add("opt_dm_equation");
+    opts.add("opt_dm_should_be");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("DM_HUH");
+    ids.add("DM_EQUATION");
+    ids.add("DM_SHOULD_BE");
+    insert(new Question("Q_DM_EQUATION", "q_dm_whats", "SINGLE", opts, ids));
+end
+
+rule "Genre Doesn't Matter - open license"
+when
+    UserAnswer(questionId == "Q_DM_EQUATION", selectedOptions contains "DM_HUH")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_dm_license_yes");
+    opts.add("opt_dm_license_no");
+    opts.add("opt_dm_dm");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("DM_LICENSE_YES");
+    ids.add("DM_LICENSE_NO");
+    ids.add("DM_LICENSE_DM");
+    insert(new Question("Q_DM_LICENSE", "q_dm_open_license", "SINGLE", opts, ids));
+end
+
+rule "Genre Doesn't Matter - open license - really"
+when
+    UserAnswer(questionId == "Q_DM_LICENSE", selectedOptions contains "DM_LICENSE_DM")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_dm_sorta");
+    opts.add("opt_dm_facist");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("DM_LICENSE_SORTA");
+    ids.add("DM_LICENSE_FACIST");
+    insert(new Question("Q_DM_LICENSE_REALLY", "q_dm_license_really", "SINGLE", opts, ids));
+end
+
+rule "Genre Doesn't Matter - scifi"
+when
+    UserAnswer(questionId == "Q_DM_LICENSE", selectedOptions contains "DM_LICENSE_NO")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_dm_scifi_yes");
+    opts.add("opt_dm_scifi_yes_phd");
+    opts.add("opt_dm_scifi_no");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("DM_SCIFI_YES");
+    ids.add("DM_SCIFI_YES_PHD");
+    ids.add("DM_SCIFI_NO");
+    insert(new Question("Q_DM_SCIFI", "q_dm_scifi", "SINGLE", opts, ids));
+end
+
+rule "Genre Doesn't Matter - Open-ended"
+when
+    UserAnswer(questionId == "Q_DM_SCIFI", selectedOptions contains "DM_SCIFI_NO")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_open_ended_yes");
+    opts.add("opt_open_ended_no");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("DM_OPENENDED_YES");
+    ids.add("DM_OPENENDED_NO");
+    insert(new Question("Q_DM_OPENENDED", "q_dm_open_ended", "SINGLE", opts, ids));
+end
+
+rule "Genre Doesn't Matter - cinematic"
+when
+    UserAnswer(questionId == "Q_DM_LICENSE", selectedOptions contains "DM_LICENSE_YES")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_dm_cinematic");
+    opts.add("opt_dm_humor");
+    opts.add("opt_dm_cinematic_no");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("DM_CINEMATIC");
+    ids.add("DM_HUMOR");
+    ids.add("DM_CINEMATIC_NO");
+    insert(new Question("Q_DM_CINEMATIC", "q_dm_cinematic", "MULTI", opts, ids));
+end
+
+rule "Genre Doesn't Matter - niche"
+when
+    UserAnswer(questionId == "Q_DM_CINEMATIC", selectedOptions contains "DM_CINEMATIC_NO")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_dm_niche_yes");
+    opts.add("opt_dm_sh");
+    opts.add("opt_dm_supernatural_pulp");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("DM_NICHE_YES");
+    ids.add("DM_NICHE_SH");
+    ids.add("DM_NICHE_SUPER_PULP");
+    insert(new Question("Q_DM_NICHE", "q_dm_niche", "MULTI", opts, ids));
+end
+
+rule "Genre Doesn't Matter - aspects"
+when
+    UserAnswer(questionId == "Q_DM_NICHE", selectedOptions contains "DM_NICHE_YES")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_aspects_yes");
+    opts.add("opt_aspects_no");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("DM_ASPECTS_YES");
+    ids.add("DM_ASPECTS_NO");
+    insert(new Question("Q_DM_ASPECTS", "q_dm_aspects", "SINGLE", opts, ids));
+end
+
+rule "DM - HERO"
+when
+    UserAnswer(questionId == "Q_DM_EQUATION", selectedOptions contains "DM_EQUATION")
+then
+    insert(new Recommendation("rec_hero"));
+end
+
+rule "DM - GURPS"
+when
+	(
+    	UserAnswer(questionId == "Q_DM_EQUATION", selectedOptions contains "DM_SHOULD_BE")
+    	or
+    	UserAnswer(questionId == "Q_DM_SCIFI", selectedOptions contains "DM_SCIFI_YES_PHD")
+    )
+    not Recommendation(systemKey == "rec_gurps")
+then
+    insert(new Recommendation("rec_gurps"));
+end
+
+rule "DM - TORG"
+when
+    UserAnswer(questionId == "Q_DM_LICENSE_REALLY", selectedOptions contains "DM_LICENSE_SORTA")
+then
+    insert(new Recommendation("rec_torg"));
+end
+
+rule "DM - RIFTS"
+when
+    UserAnswer(questionId == "Q_DM_LICENSE_REALLY", selectedOptions contains "DM_LICENSE_FACIST")
+then
+    insert(new Recommendation("rec_rifts"));
+end
+
+rule "DM - Basic Role Playing"
+when
+    UserAnswer(questionId == "Q_DM_OPENENDED", selectedOptions contains "DM_OPENENDED_NO")
+then
+    insert(new Recommendation("rec_basic"));
+end
+
+rule "DM - Savage Worlds"
+when
+    UserAnswer(questionId == "Q_DM_OPENENDED", selectedOptions contains "DM_OPENENDED_YES")
+then
+    insert(new Recommendation("rec_savage_worlds"));
+end
+
+rule "DM - Cortex"
+when
+    UserAnswer(questionId == "Q_DM_SCIFI", selectedOptions contains "DM_SCIFI_YES")
+then
+    insert(new Recommendation("rec_cortex"));
+end
+
+rule "DM - Risus"
+when
+    UserAnswer(questionId == "Q_DM_CINEMATIC", selectedOptions contains "DM_HUMOR")
+then
+    insert(new Recommendation("rec_risus"));
+end
+
+rule "DM - Open d6"
+when
+    UserAnswer(questionId == "Q_DM_CINEMATIC", selectedOptions contains "DM_CINEMATIC")
+then
+    insert(new Recommendation("rec_opend6"));
+end
+
+rule "DM - FATE"
+when
+    UserAnswer(questionId == "Q_DM_ASPECTS", selectedOptions contains "DM_ASPECTS_YES")
+then
+    insert(new Recommendation("rec_fate"));
+end
+
+rule "DM - FUDGE"
+when
+    UserAnswer(questionId == "Q_DM_ASPECTS", selectedOptions contains "DM_ASPECTS_NO")
+then
+    insert(new Recommendation("rec_fudge"));
+end
