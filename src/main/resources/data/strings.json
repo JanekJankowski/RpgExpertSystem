@@ -122,8 +122,220 @@
   "rec_fate": "FATE",
   "rec_fudge": "FUDGE",
   
-  "q_np_undead": "Like Undead?",
-  "q_np_vampire": "Can I be a vampire?",
+   "q_mf_subgenre": "Which sub-genre?",
+
+  "opt_mf_oriental": "Oriental",
+  "opt_mf_humor": "Humor",
+  "opt_mf_high_fantasy_general": "High Fantasy General",
+  "opt_mf_high_magic": "High Magic",
+  "opt_mf_low_fantasy": "Low Fantasy",
+  
+  "rec_hmaster":"Hackmaster",
+  
+  "q_mf_orient":"With meta-plots and a CCG elements?",
+  "opt_mf_o_plots_yes":"Yes",
+  "opt_mf_o_plots_no":"No",
+  "rec_legend_ring":"Legend of  the 5 Rings",
+  "rec_or_adventures":"Oriental Adventures",
+  
+  "q_mf_hf" : "W/Classes? Point Buy?",
+  "opt_mf_hf_lifepaths": "Lifepaths",
+  "opt_mf_hf_spaghetti": "Great ideas, But spaghetti rules",
+  "opt_mf_hf_did": "Just give me The D&D options",
+  "opt_mf_hf_allpoint": "No class, All point buy",
+  "opt_mf_hf_customchart": "4 Custom Charts Per Class",
+  "opt_mf_hf_pointsystem": "Point System",
+  
+  "q_mf_mythology": "Mythology based?",
+  "opt_mf_mythology_yes":"Yes",
+"opt_mf_mythology_no":"No",
+
+  "rec_exhalted":"Exalted",
+  "rec_fantasy_hero":"Fantasy Hero",	  
+  "rec_burn_wheel":"Burning Wheel",
+  "rec_fhero":"Fantasy HERO",
+  "rec_rolemaster":"Rolemaster",
+  "rec_palladium":"Palladium Fantasy",
+  
+  "q_mf_gyg":"What do you think of Gygax?",  
+
+	"opt_mf_gyg_who":"Who?",
+	"opt_mf_gyg_cool":"He's cool.",
+	"opt_mf_gyg_father":"He's the Father Of RPGs",
+	
+	"q_mf_mm_c":"Do you want a game based on a CRPG or MMORPG?",
+
+	"opt_mf_crpg":"CRPG",
+	"opt_mf_mmorpg":"MMORPG",
+
+	"rec_drag_age":"Dragon Age",
+		
+	"rec_did_4e":"D&D 4E",
+	
+	"q_mf_odd_mechanics": "Do you like odd mechanics?",
+ 	"opt_mf_odd_yes": "More subsystem please",
+  	"opt_mf_odd_no": "No",
+	"rec_did_2e":"D&D 2E",
+	"q_mf_splatbooks": "Want splatbooks galore?",
+	"opt_mf_splat_not": "Not really",
+	"opt_mf_splat_yes": "Yes",
+	"opt_mf_splat_simple": "Make it simple",
+	
+	"q_mf_simple": "How simple?",
+	"opt_mf_simple_very": "Very",
+	"opt_mf_simple_sorta": "Sorta",
+	
+	"q_mf_post2007": "Want post 2007 updates?",
+	"opt_mf_post_no": "No",
+	"opt_mf_post_yes": "Yes",
+	"rec_cnc": "Castles and Crusades",
+ 	"rec_true20": "True20",
+ 	"rec_fantasy_craft": "Fantasy Craft",
+ 	"rec_dnd_35": "D&D 3E/3.5",
+ 	"rec_pathfinder": "Pathfinder",
+  	"q_mf_fundamentalist": "Are you fundamentalist about it?",
+  	"opt_mf_fund_yes": "Yes",
+  	"opt_mf_fund_no": "No",
+	"rec_did_0e":"D&D 0E",
+	
+  	"q_mf_races": "Do you like races or classes?",
+  	"opt_mf_race_no_cleric": "Why can't my dwarf be a cleric?",
+  	"opt_mf_race_yes": "Yes",
+  	"opt_mf_race_two": "Only 2 classes are needed",
+  	"opt_mf_race_archetypes": "Archetypes instead",
+  	"opt_mf_race_no_skills": "No but I want skills",
+	
+  	"q_mf_skills": "Want skills with that?",
+  	"opt_mf_skills_no": "No",
+  	"opt_mf_skills_yes": "Yes",
+
+  	"q_mf_gygax_himself": "Designed by Gygax himself?",
+  	"opt_mf_gyg_no": "No",
+  	"opt_mf_gyg_yes": "Yes",
+  	"opt_mf_gyg_yes_drop": "Yes and drop classes too",
+  	
+  	"rec_dnd_3e": "D&D 3E",
+  	"rec_becmi": "BECMI",
+  	"rec_tnt_early": "Tunnels & Trolls early edition",
+  	"rec_tnt_7": "Tunnels & Trolls 7th edition",
+  	"rec_talislanta": "Talislanta",
+  	"rec_hackmaster_basic": "Hackmaster Basic",
+  	"rec_dangerous_journeys": "Dangerous Journeys",
+  	"rec_legendary_adventure": "Legendary Adventure",
+  
+	"q_mf_hm_set":"Semi-historical or post-apocaliptic Setting?",
+    "opt_mf_hm_papo":"Post-apoc",
+    "opt_mf_hm_sem_hist":"Semi-historical",
+    "opt_mf_hm_not":"Neither",
+    
+    "q_mf_hm_did":"Hybridize it moreso with D&D?",
+    "opt_mf_hm_did":"No",
+    
+    "q_mf_hm_his":"Based on the Middle ages or Renaissance ?",
+    "opt_mf_hm_renai":"Renaissance",
+    "opt_mf_hm_mid_age":"Middle Ages",
+
+    "rec_runequest":"RuneQuest",
+	"rec_edawn":"EarthDawn",
+	"rec_7sea":"7th Sea",
+	"rec_arsmag":"Ars Magica",
+	
+	"q_mf_career": "What do you think of career path advancement?",
+  	"opt_mf_career_good": "Good idea",
+  	"opt_mf_career_no": "Not really",
+
+  	"q_mf_dice_pools": "Dice pools?",
+  	"opt_mf_dice_yes": "Yes",
+  	"opt_mf_dice_no": "No",
+
+  	"q_mf_old_new": "Old or new school?",
+  	"opt_mf_school_old": "Old",
+  	"opt_mf_school_new": "New",
+
+  	"q_mf_slew": "Still want a slew of skills?",
+  	"opt_mf_slew_astrology": "Use astrology instead",
+  	"opt_mf_slew_not": "Not really",
+  	"opt_mf_slew_15": "& > 15 abilities",
+
+  	"q_mf_dynasty": "Medieval dynasty or heraldry rules?",
+  	"opt_mf_dyn_heraldry": "Heraldry",
+ 	"opt_mf_dyn_dynasty": "Dynasty",
+  	"opt_mf_dyn_neither": "Neither",
+
+  	"rec_wfrp_2e": "Warhammer Roleplay 2e",
+  	"rec_wfrp_3e": "Warhammer Roleplay 3e",
+  	"rec_chivalry_sorcery": "Chivalry & Sorcery",
+  	"rec_soiaf": "Song of Ice and Fire Roleplaying",
+  	"rec_pendragon": "Pendragon",
+  	"rec_conan_tsr": "Conan (TSR)",
+  	"rec_harnmaster": "Harnmaster",
+  	"rec_conan_mongoose": "Conan (Mongoose)",
+	 
+	 "q_ff_tv":"Based on a Movie or TV show ?",
+
+    "opt_ff_starg":"Stargate",
+
+    "opt_ff_oth":"Other ",
+
+    "opt_ff_no":"No",
+
+    "opt_ff_sw":"Star Wars",
+    
+    "rec_other":"Just do a web search for the movie/show and 'RPG' ",
+	"rec_fringe":"Fringeworthy",
+	
+	 "q_ff_sw":"Have lots of d6s and don't care about episodes 1-3?",
+	 
+	"opt_ff_sw_yes":"Yes",
+	 "opt_ff_sw_no":"No",
+	
+	"rec_sw_saga":"Star Wars Saga",
+	"rec_sw_d6":"Star Wars d6",
+	
+	"q_ff_op_lic":"Do you want a game with an open license?",
+	
+	"opt_ff_ol_yes":"Yes",
+	"opt_ff_ol_no":"No",
+	"opt_ff_ol_y_n":"Yes and no",
+	
+	"rec_eclipse_phase":"Eclipse Phase",
+	"rec_traveller":"Traveller",
+	
+	"q_ff_deriv":"D&D/TSR derivative or not?",
+	"opt_ff_deriv_yes":"Yes",
+	"opt_ff_deriv_not":"Not",
+	
+	"q_ff_subgen":"Gothic, Space opera or post apocalyptic?",
+    "opt_ff_goth":"Gothic",
+    "opt_ff_space":"Space opera",
+    "opt_ff_papo":"Post apocalyptic",
+	"opt_ff_semi":"Semi-generic",
+	
+	"rec_warhammer":"Warhammer 40k RPG",
+	"rec_fad_suns":"Fading Suns",
+	"rec_gu_fallout":"GURPS Fallout",
+	"rec_gu_trashuman":"GURPS Trashuman Space",
+	
+	"q_ff_dnd_ed": "Old school D&D 2E, 3E or 4E based?",
+
+	"opt_ff_dnd_2e": "Old school / 2E",
+	"opt_ff_dnd_3e": "3E",
+	"opt_ff_dnd_4e": "4E",
+	
+	"rec_alternity": "Alternity",
+	"rec_d20_future": "D20 Future",
+	"rec_gamma_world": "Gamma World",
+	
+	"q_ff_dnd_sci": "Science fiction or science fantasy?",
+	
+	"opt_ff_did_sci_fan":"Science Fantasy",
+	"opt_ff_did_sci_fi":"Science fiction",
+	
+	"rec_st_fronties":"Metamorphosis Alpha",
+	"rec_meta_alpha":"Star Fronties",
+	
+	"q_np_undead": "Like Undead?",
+  "q_np_vampire": "I can be a vampire?",
   "q_np_done_well": "If done well",
   "q_np_not_really": "Not really",
   
@@ -161,6 +373,5 @@
   "rec_shadowrun": "Shadowrun",
   "rec_wh40k": "Warhammer 40K RP",
   "rec_top_secret": "Top Secret",
-  "rec_amber": "Amber",
-  
+  "rec_amber": "Amber"
 }
