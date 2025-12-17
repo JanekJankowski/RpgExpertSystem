@@ -244,7 +244,7 @@ then
     ids.add("AH_FATE");
     ids.add("AH_D20");
     ids.add("AH_NEITHER");
-    insert(new Question("Q_AH_START", "q_ahs_start", "MULTI", opts, ids));
+    insert(new Question("Q_AH_START", "q_ah_start", "MULTI", opts, ids));
 end
 
 rule "AH - SUPERNATURAL OR PULP"
@@ -524,7 +524,12 @@ end
 
 rule "DM - RIFTS"
 when
-    UserAnswer(questionId == "Q_DM_LICENSE_REALLY", selectedOptions contains "DM_LICENSE_FACIST")
+	(
+	    UserAnswer(questionId == "Q_DM_LICENSE_REALLY", selectedOptions contains "DM_LICENSE_FACIST")
+	    or
+	    UserAnswer(questionId == "Q_NP_STYLE", selectedOptions contains "NP_EVERYTHING")
+    )
+    not Recommendation(systemKey == "rec_rifts")
 then
     insert(new Recommendation("rec_rifts"));
 end
@@ -576,4 +581,180 @@ when
     UserAnswer(questionId == "Q_DM_ASPECTS", selectedOptions contains "DM_ASPECTS_NO")
 then
     insert(new Recommendation("rec_fudge"));
+end
+
+// =========================================
+// ŒCIE¯KA: NEAR PRESENT
+// =========================================
+
+rule "NP - Undead"
+when
+    UserAnswer(questionId == "Q_GENRE", selectedOptions contains "NEAR_PRESENT")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("q_np_vampire");
+    opts.add("q_np_done_well");
+    opts.add("q_np_not_really");
+    ArrayList ids = new ArrayList();
+    ids.add("NP_VAMPIRE");
+    ids.add("NP_DONE_WELL");
+    ids.add("NP_NOT_REALLY");
+    
+    insert(new Question("Q_NP_UNDEAD", "q_np_undead", "SINGLE", opts, ids));
+end
+
+rule "NP - Subgenre"
+when
+    UserAnswer(questionId == "Q_NP_UNDEAD", selectedOptions contains "NP_NOT_REALLY")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_np_alt_realities");
+    opts.add("opt_np_gothic");
+    opts.add("opt_np_spies");
+    opts.add("opt_np_cyberpunk");
+    opts.add("opt_np_humor");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("NP_ALT_REALITIES");
+    ids.add("NP_GOTHIC");
+    ids.add("NP_SPIES");
+    ids.add("NP_CYBERPUNK");
+    ids.add("NP_HUMOR");
+
+    insert(new Question("Q_NP_SUBGENRE", "q_np_subgenre", "MULTI", opts, ids));
+end
+
+rule "NP - Spies Start"
+when
+    UserAnswer(questionId == "Q_NP_SUBGENRE", selectedOptions contains "NP_SPIES")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_np_spies_old");
+    opts.add("opt_np_spies_new");
+    ArrayList ids = new ArrayList();
+    ids.add("NP_SPIES_OLD");
+    ids.add("NP_SPIES_NEW");
+    
+    insert(new Question("Q_NP_SPIES_ERA", "q_np_spies_era", "SINGLE", opts, ids));
+end
+
+rule "NP - Spies D20 "
+when
+    UserAnswer(questionId == "Q_NP_SPIES_ERA", selectedOptions contains "NP_SPIES_NEW")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_np_d20_full");
+    opts.add("opt_np_d20_lite");
+    ArrayList ids = new ArrayList();
+    ids.add("NP_D20_FULL");
+    ids.add("NP_D20_LITE");
+    
+    insert(new Question("Q_NP_SPIES_D20", "q_np_d20", "SINGLE", opts, ids));
+end
+
+rule "NP - Cyberpunk Start"
+when
+    UserAnswer(questionId == "Q_NP_SUBGENRE", selectedOptions contains "NP_CYBERPUNK")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_np_straight");
+    opts.add("opt_np_magic");
+    opts.add("opt_np_everything");
+    ArrayList ids = new ArrayList();
+    ids.add("NP_STRAIGHT");
+    ids.add("NP_MAGIC");
+    ids.add("NP_EVERYTHING");
+    
+    insert(new Question("Q_NP_STYLE", "q_np_style", "MULTI", opts, ids));
+end
+
+rule "NP - ALT Point pools"
+when
+    UserAnswer(questionId == "Q_NP_SUBGENRE", selectedOptions contains "NP_ALT_REALITIES")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_np_yes");
+    opts.add("opt_np_no");
+    ArrayList ids = new ArrayList();
+    ids.add("NP_YES");
+    ids.add("NP_NO");
+    
+    insert(new Question("Q_NP_POOLS", "q_np_pools", "SINGLE", opts, ids));
+end
+
+rule "NP - Cyberpunk 2020"
+when
+    UserAnswer(questionId == "Q_NP_STYLE", selectedOptions contains "NP_STRAIGHT")
+then
+    insert(new Recommendation("rec_cyberpunk2020"));
+end
+
+rule "NP - Shadowrun"
+when
+    UserAnswer(questionId == "Q_NP_STYLE", selectedOptions contains "NP_MAGIC")
+then
+    insert(new Recommendation("rec_shadowrun"));
+end
+
+rule "NP - Paranoia"
+when
+    UserAnswer(questionId == "Q_NP_SUBGENRE", selectedOptions contains "NP_HUMOR")
+then
+    insert(new Recommendation("rec_paranoia"));
+end
+
+rule "NP - WH 40K"
+when
+    UserAnswer(questionId == "Q_NP_SUBGENRE", selectedOptions contains "NP_GOTHIC")
+then
+    insert(new Recommendation("rec_wh40k"));
+end
+
+rule "NP - World of Darkness"
+when
+    UserAnswer(questionId == "Q_NP_UNDEAD", selectedOptions contains "NP_VAMPIRE")
+then
+    insert(new Recommendation("rec_wod"));
+end
+
+rule "NP - Call of Cthulhu"
+when
+    UserAnswer(questionId == "Q_NP_UNDEAD", selectedOptions contains "NP_DONE_WELL")
+then
+    insert(new Recommendation("rec_coc"));
+end
+
+rule "NP - Nobilis"
+when
+    UserAnswer(questionId == "Q_NP_POOLS", selectedOptions contains "NP_YES")
+then
+    insert(new Recommendation("rec_nobilis"));
+end
+
+rule "NP - Amber"
+when
+    UserAnswer(questionId == "Q_NP_POOLS", selectedOptions contains "NP_NO")
+then
+    insert(new Recommendation("rec_amber"));
+end
+
+rule "NP - Top Secret"
+when
+    UserAnswer(questionId == "Q_NP_SPIES_ERA", selectedOptions contains "NP_SPIES_OLD")
+then
+    insert(new Recommendation("rec_top_secret"));
+end
+
+rule "NP - D20 Modern"
+when
+    UserAnswer(questionId == "Q_NP_SPIES_D20", selectedOptions contains "NP_D20_FULL")
+then
+    insert(new Recommendation("rec_d20_modern"));
+end
+
+rule "NP - Spycraft"
+when
+    UserAnswer(questionId == "Q_NP_SPIES_D20", selectedOptions contains "NP_D20_LITE")
+then
+    insert(new Recommendation("rec_spycraft"));
 end

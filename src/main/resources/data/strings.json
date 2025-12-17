@@ -121,4 +121,46 @@
   "rec_opend6": "Open d6",
   "rec_fate": "FATE",
   "rec_fudge": "FUDGE",
+  
+  "q_np_undead": "Like Undead?",
+  "q_np_vampire": "Can I be a vampire?",
+  "q_np_done_well": "If done well",
+  "q_np_not_really": "Not really",
+  
+  "q_np_subgenre": "Humor, Spies, Gothic, Alternate Realities or Cyberpunk?",
+  "opt_np_alt_realities": "Alternate Realities",
+  "opt_np_gothic": "Gothic",
+  "opt_np_spies": "Spies",
+  "opt_np_cyberpunk": "Cyberpunk",
+  "opt_np_humor": "Humor",
+
+  "q_np_spies_era": "Old or New School?",
+  "opt_np_spies_old": "Old School",
+  "opt_np_spies_new": "New School",
+ 
+  "q_np_d20": "Full d20 based or d20 lite?",
+  "opt_np_d20_full": "Full d20",
+  "opt_np_d20_lite": "Lite",
+  
+  "q_np_style": "Want some other genres mixed with that?",
+  "opt_np_straight": "Straight up",
+  "opt_np_magic": "Some Magic",
+  "opt_np_everything": "A little of everything",
+  
+  "q_np_pools": "Point pools for action resolution?",
+  "opt_np_yes": "Yes",
+  "opt_np_no": "No",
+  
+  "rec_paranoia": "Paranoia",
+  "rec_wod": "World of Darkness",
+  "rec_coc": "Call of Cthulhu",
+  "rec_nobilis": "Nobilis",
+  "rec_d20_modern": "D20 Modern",
+  "rec_spycraft": "Spycraft",
+  "rec_cyberpunk2020": "Cyberpunk 2020",
+  "rec_shadowrun": "Shadowrun",
+  "rec_wh40k": "Warhammer 40K RP",
+  "rec_top_secret": "Top Secret",
+  "rec_amber": "Amber",
+  
 }
