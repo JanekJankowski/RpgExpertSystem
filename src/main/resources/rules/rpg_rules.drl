@@ -4,11 +4,11 @@ import java.util.List
 import java.util.ArrayList
 
 declare Question
-    id : String				// ID pytania dla regu³
+    id : String				// ID pytania dla reguï¿½
     textKey : String		// pytanie z JSON
     type : String			// "SINGLE" lub "MULTI" (radio vs checkbox)
     options : List			// odpowiedz z JSON
-    optionIds : List		// ID odpowiedzi dla regu³
+    optionIds : List		// ID odpowiedzi dla reguï¿½
 end
 
 declare UserAnswer
@@ -20,7 +20,7 @@ declare Recommendation
     systemKey : String		// rekomendacja z JSON
 end
 
-// --- REGU£Y ---
+// --- REGUï¿½Y ---
 
 rule "Init - Start Process"
 when
@@ -46,7 +46,7 @@ then
 end
 
 // =========================================
-// ŒCIE¯KA: SUPERS
+// ï¿½CIEï¿½KA: SUPERS
 // =========================================
 
 rule "Supers - start"
@@ -66,7 +66,7 @@ then
 end
 
 // =========================================
-// ŒCIE¯KA: Marvel COMICS
+// ï¿½CIEï¿½KA: Marvel COMICS
 // =========================================
 
 rule "Supers - Marvel"
@@ -107,7 +107,7 @@ then
 end
 
 // =========================================
-// ŒCIE¯KA: DC COMICS
+// ï¿½CIEï¿½KA: DC COMICS
 // =========================================
 
 rule "Supers - DC Start"
@@ -150,7 +150,7 @@ end
 
 
 // =========================================
-// ŒCIE¯KA: INNE / W£ASNE (NO / OTHER)
+// ï¿½CIEï¿½KA: INNE / Wï¿½ASNE (NO / OTHER)
 // =========================================
 
 rule "Supers - Other Start"
@@ -228,7 +228,7 @@ then
 end
 
 // =========================================
-// ŒCIE¯KA: ALT HISTORY
+// ï¿½CIEï¿½KA: ALT HISTORY
 // =========================================
 
 rule "AH - start"
@@ -334,7 +334,7 @@ then
 end
 
 // =========================================
-// ŒCIE¯KA: Genre Shoudn't Matter
+// ï¿½CIEï¿½KA: Genre Shoudn't Matter
 // =========================================
 
 rule "Genre Doesn't Matter - start"
@@ -524,12 +524,7 @@ end
 
 rule "DM - RIFTS"
 when
-	(
-	    UserAnswer(questionId == "Q_DM_LICENSE_REALLY", selectedOptions contains "DM_LICENSE_FACIST")
-	    or
-	    UserAnswer(questionId == "Q_NP_STYLE", selectedOptions contains "NP_EVERYTHING")
-    )
-    not Recommendation(systemKey == "rec_rifts")
+    UserAnswer(questionId == "Q_DM_LICENSE_REALLY", selectedOptions contains "DM_LICENSE_FACIST")
 then
     insert(new Recommendation("rec_rifts"));
 end
@@ -583,9 +578,950 @@ then
     insert(new Recommendation("rec_fudge"));
 end
 
-// =========================================
-// ŒCIE¯KA: NEAR PRESENT
-// =========================================
+//MEDIEVAL FANTASY
+//=================
+
+
+rule "MF - start"
+when
+    UserAnswer(questionId == "Q_GENRE", selectedOptions contains "MF")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_oriental");
+    opts.add("opt_mf_humor");
+    opts.add("opt_mf_high_fantasy_general");
+    opts.add("opt_mf_high_magic");
+    opts.add("opt_mf_low_fantasy");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_ORIENTAL");
+    ids.add("MF_HUMOR");
+    ids.add("MF_HIGH_FANTASY");
+    ids.add("MF_HIGH_MAGIC");
+    ids.add("MF_LOW");
+
+    insert(new Question("Q_MF_SUBGENRE","q_mf_subgenre","MULTI",opts,ids));
+end
+
+rule "MF - humor"
+when
+    UserAnswer(questionId == "Q_MF_SUBGENRE", selectedOptions contains "MF_HUMOR")
+then
+    insert(new Recommendation("rec_hmaster"));
+end
+
+rule "MF - orient"
+when
+    UserAnswer(questionId == "Q_MF_SUBGENRE", selectedOptions contains "MF_ORIENTAL")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_o_plots_yes");
+    opts.add("opt_mf_o_plots_no");
+
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_O_PLOTS_YES");
+    ids.add("MF_O_PLOTS_NO");
+    insert(new Question("Q_MF_ORIENT","q_mf_orient","SINGLE",opts,ids));
+end
+
+rule "MF - META-PLOTS-yes"
+when
+    UserAnswer(questionId == "Q_MF_ORIENT", selectedOptions contains "MF_O_PLOTS_YES")
+then
+    insert(new Recommendation("rec_legend_ring"));
+end
+
+rule "MF - META-PLOTS-no"
+when
+    UserAnswer(questionId == "Q_MF_ORIENT", selectedOptions contains "MF_O_PLOTS_NO")
+then
+    insert(new Recommendation("rec_or_adventures"));
+end
+
+rule "MF - high fantasy "
+when 
+	UserAnswer(questionId == "Q_MF_SUBGENRE", selectedOptions contains "MF_HIGH_FANTASY")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_hf_lifepaths");
+    opts.add("opt_mf_hf_spaghetti");
+    opts.add("opt_mf_hf_did");
+    opts.add("opt_mf_hf_allpoint");
+    opts.add("opt_mf_hf_customchart");
+    opts.add("opt_mf_hf_pointsystem");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_HF_LIFEPATHS");
+    ids.add("MF_HF_SPAGHETTI");
+    ids.add("MF_HF_DID");
+    ids.add("MF_HF_ALLPOINT");
+    ids.add("MF_HF_CHART");
+    ids.add("MF_HF_PKTSYSTEM");
+
+    insert(new Question("Q_MF_CLASSES","q_mf_hf","MULTI",opts,ids));
+end
+
+rule "MF - HF_LIFEPATHS"
+when
+    UserAnswer(questionId == "Q_MF_CLASSES", selectedOptions contains "MF_HF_LIFEPATHS")
+then
+    insert(new Recommendation("rec_burn_wheel"));
+end
+
+rule "MF - HF_spaghetti"
+when
+    UserAnswer(questionId == "Q_MF_CLASSES", selectedOptions contains "MF_HF_SPAGHETTI")
+then
+    insert(new Recommendation("rec_palladium"));
+end
+
+
+rule "MF - HF_ALLPOINT"
+when
+    UserAnswer(questionId == "Q_MF_CLASSES", selectedOptions contains "MF_HF_ALLPOINT")
+then
+    insert(new Recommendation("rec_fhero"));
+end
+
+rule "MF - HF_chart"
+when
+    UserAnswer(questionId == "Q_MF_CLASSES", selectedOptions contains "MF_HF_CHART")
+then
+    insert(new Recommendation("rec_rolemaster"));
+end
+
+rule "MF -HF_points"
+when
+    UserAnswer(questionId == "Q_MF_CLASSES", selectedOptions contains "MF_HF_PKTSYSTEM")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_mythology_yes");
+    opts.add("opt_mf_mythology_no");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_MYTHOLOGY_YES");
+    ids.add("MF_MYTHOLOGY_NO");
+
+    insert(new Question("Q_MF_MYTH","q_mf_mythology","SINGLE",opts,ids));
+end
+
+rule "MF - mythology-yes"
+when
+    UserAnswer(questionId == "Q_MF_MYTH", selectedOptions contains "MF_MYTHOLOGY_YES")
+then
+    insert(new Recommendation("rec_exhalted"));
+end
+
+rule "MF - mythology-no"
+when
+    UserAnswer(questionId == "Q_MF_MYTH", selectedOptions contains "MF_MYTHOLOGY_NO")
+then
+    insert(new Recommendation("rec_fantasy_hero"));
+end
+
+rule "MF - Did start "
+when 
+	UserAnswer(questionId == "Q_MF_CLASSES", selectedOptions contains "MF_HF_DID")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_gyg_who");
+    opts.add("opt_mf_gyg_cool");
+    opts.add("opt_mf_gyg_father");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_GYG_WHO");
+    ids.add("MF_GYG_COOL");
+    ids.add("MF_GYG_FATHER");
+
+    insert(new Question("Q_MF_GYGAX","q_mf_gyg","SINGLE",opts,ids));
+end
+
+rule "MF - Did CRPG or MMORPG "
+when 
+	UserAnswer(questionId == "Q_MF_GYGAX", selectedOptions contains "MF_GYG_WHO")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_crpg");
+    opts.add("opt_mf_mmorpg");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_GYG_CRPG");
+    ids.add("MF_GYG_MMORPG");
+
+    insert(new Question("Q_MF_MM_C","q_mf_mm_c","SINGLE",opts,ids));
+end
+
+rule "MF - did crpg "
+when
+    UserAnswer(questionId == "Q_MF_MM_C", selectedOptions contains "MF_GYG_CRPG")
+then
+    insert(new Recommendation("rec_drag_age"));
+end
+
+rule "MF - did mmorpg "
+when
+    UserAnswer(questionId == "Q_MF_MM_C", selectedOptions contains "MF_GYG_MMORPG")
+then
+    insert(new Recommendation("rec_did_4e"));
+end
+
+rule "MF - did-mechanics"
+when
+    UserAnswer(questionId == "Q_MF_GYGAX", selectedOptions contains "MF_GYG_COOL")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_odd_yes");
+    opts.add("opt_mf_odd_no");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_ODD_YES");
+    ids.add("MF_ODD_NO");
+
+    insert(new Question("Q_MF_ODD_MECH","q_mf_odd_mechanics","SINGLE",opts,ids));
+end
+
+
+rule "MF - did more subsystem"
+when
+    UserAnswer(questionId == "Q_MF_ODD_MECH", selectedOptions contains "MF_ODD_YES")
+then
+    insert(new Recommendation("rec_did_2e"));
+end
+rule "MF - odd mechanics no -> splatbooks"
+when
+    UserAnswer(questionId == "Q_MF_ODD_MECH", selectedOptions contains "MF_ODD_NO")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_splat_not"); 
+    opts.add("opt_mf_splat_yes"); 
+    opts.add("opt_mf_splat_simple");
+    
+    ArrayList ids = new ArrayList(); 
+    ids.add("MF_SPLAT_NOT"); 
+    ids.add("MF_SPLAT_YES"); 
+    ids.add("MF_SPLAT_SIMPLE");
+    insert(new Question("Q_MF_SPLATBOOKS","q_mf_splatbooks","SINGLE",opts,ids));
+end
+
+rule "MF - splatbooks not really"
+when
+    UserAnswer(questionId == "Q_MF_SPLATBOOKS", selectedOptions contains "MF_SPLAT_NOT")
+then
+    insert(new Recommendation("rec_cnc"));
+end
+
+
+rule "MF - splatbooks simple"
+when
+    UserAnswer(questionId == "Q_MF_SPLATBOOKS", selectedOptions contains "MF_SPLAT_SIMPLE")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_simple_very");
+    opts.add("opt_mf_simple_sorta");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("MF_SIMPLE_VERY");
+    ids.add("MF_SIMPLE_SORTA");
+    insert(new Question("Q_MF_SIMPLE","q_mf_simple","SINGLE",opts,ids));
+end
+
+
+rule "MF - simple very"
+when
+    UserAnswer(questionId == "Q_MF_SIMPLE", selectedOptions contains "MF_SIMPLE_VERY")
+then
+    insert(new Recommendation("rec_true20"));
+end
+
+rule "MF - simple sorta"
+when
+    UserAnswer(questionId == "Q_MF_SIMPLE", selectedOptions contains "MF_SIMPLE_SORTA")
+then
+    insert(new Recommendation("rec_fantasy_craft"));
+end
+
+rule "MF - splatbooks yes -> post 2007"
+when
+    UserAnswer(questionId == "Q_MF_SPLATBOOKS", selectedOptions contains "MF_SPLAT_YES")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_post_no");
+    opts.add("opt_mf_post_yes");
+    
+    ArrayList ids = new ArrayList();
+    ids.add("MF_POST_NO");
+    ids.add("MF_POST_YES");
+    insert(new Question("Q_MF_POST2007","q_mf_post2007","SINGLE",opts,ids));
+end
+
+rule "MF - post 2007 no"
+when
+    UserAnswer(questionId == "Q_MF_POST2007", selectedOptions contains "MF_POST_NO")
+then
+    insert(new Recommendation("rec_dnd_35"));
+end
+
+rule "MF - post 2007 yes"
+when
+    UserAnswer(questionId == "Q_MF_POST2007", selectedOptions contains "MF_POST_YES")
+then
+    insert(new Recommendation("rec_pathfinder"));
+end
+
+rule "MF - did fundamentalist"
+when
+    UserAnswer(questionId == "Q_MF_GYGAX", selectedOptions contains "MF_GYG_FATHER")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_fund_yes");
+    opts.add("opt_mf_fund_no");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_FUND_YES");
+    ids.add("MF_FUND_NO");
+
+    insert(new Question("Q_MF_FUNDAMENTALIST","q_mf_fundamentalist","SINGLE",opts,ids));
+end
+
+rule "MF -did - fundamentalist - yes"
+when
+    UserAnswer(questionId == "Q_MF_FUNDAMENTALIST", selectedOptions contains "MF_FUND_YES")
+then
+    insert(new Recommendation("rec_dnd_0e"));
+end
+
+rule "MF - did fundamentalist - no"
+when
+    UserAnswer(questionId == "Q_MF_FUNDAMENTALIST", selectedOptions contains "MF_FUND_NO")
+then
+    ArrayList opts = new ArrayList(); 
+    opts.add("opt_mf_race_yes"); 
+    opts.add("opt_mf_race_no_cleric"); 
+    opts.add("opt_mf_race_two"); 
+    opts.add("opt_mf_race_no_skills");
+    opts.add("opt_mf_race_archetypes");
+    
+    ArrayList ids = new ArrayList(); 
+    ids.add("MF_RACE_YES"); 
+    ids.add("MF_RACE_NO_CLERIC"); 
+    ids.add("MF_RACE_TWO"); 
+    ids.add("MF_RACE_NO_SKILLS");
+    ids.add("MF_RACE_ARCHETYPES");
+    insert(new Question("Q_MF_RACES","q_mf_races","MULTI",opts,ids));
+end
+
+rule "MF - races dwarf cleric"
+when
+    UserAnswer(questionId == "Q_MF_RACES", selectedOptions contains "MF_RACE_NO_CLERIC")
+then
+    insert(new Recommendation("rec_dnd_3e"));
+end
+
+rule "MF - races yes"
+when
+    UserAnswer(questionId == "Q_MF_RACES", selectedOptions contains "MF_RACE_YES")
+then
+    insert(new Recommendation("rec_becmi"));
+end
+
+rule "MF - races two classes"
+when
+    UserAnswer(questionId == "Q_MF_RACES", selectedOptions contains "MF_RACE_TWO")
+then
+    ArrayList opts = new ArrayList(); 
+    opts.add("opt_mf_skills_no"); 
+    opts.add("opt_mf_skills_yes");
+    
+    ArrayList ids = new ArrayList(); 
+    ids.add("MF_SKILLS_NO"); 
+    ids.add("MF_SKILLS_YES");
+    insert(new Question("Q_MF_SKILLS","q_mf_skills","SINGLE",opts,ids));
+end
+
+rule "MF - skills no"
+when
+    UserAnswer(questionId == "Q_MF_SKILLS", selectedOptions contains "MF_SKILLS_NO")
+then
+    insert(new Recommendation("rec_tnt_early"));
+end
+
+rule "MF - skills yes"
+when
+    UserAnswer(questionId == "Q_MF_SKILLS", selectedOptions contains "MF_SKILLS_YES")
+then
+    insert(new Recommendation("rec_tnt_7"));
+end
+
+rule "MF - races archetypes"
+when
+    UserAnswer(questionId == "Q_MF_RACES", selectedOptions contains "MF_RACE_ARCHETYPES")
+then
+    insert(new Recommendation("rec_talislanta"));
+end
+
+rule "MF - races no but skills"
+when
+    UserAnswer(questionId == "Q_MF_RACES", selectedOptions contains "MF_RACE_NO_SKILLS")
+then
+    ArrayList opts = new ArrayList(); 
+    opts.add("opt_mf_gyg_no"); 
+    opts.add("opt_mf_gyg_yes"); 
+    opts.add("opt_mf_gyg_yes_drop");
+    
+    ArrayList ids = new ArrayList(); 
+    ids.add("MF_GYG_NO"); ids.add("MF_GYG_YES"); 
+    ids.add("MF_GYG_YES_DROP");
+    insert(new Question("Q_MF_GYGAX_HIMSELF","q_mf_gygax_himself","SINGLE",opts,ids));
+end
+
+rule "MF - gygax himself no"
+when
+    UserAnswer(questionId == "Q_MF_GYGAX_HIMSELF", selectedOptions contains "MF_GYG_NO")
+then
+    insert(new Recommendation("rec_hackmaster_basic"));
+end
+
+rule "MF - gygax himself yes"
+when
+    UserAnswer(questionId == "Q_MF_GYGAX_HIMSELF", selectedOptions contains "MF_GYG_YES")
+then
+    insert(new Recommendation("rec_dangerous_journeys"));
+end
+
+rule "MF - gygax himself yes drop classes"
+when
+    UserAnswer(questionId == "Q_MF_GYGAX_HIMSELF", selectedOptions contains "MF_GYG_YES_DROP")
+then
+    insert(new Recommendation("rec_legendary_adventure"));
+end
+
+rule "MF - high magic"
+when
+    UserAnswer(questionId == "Q_MF_SUBGENRE", selectedOptions contains "MF_HIGH_MAGIC")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_hm_papo");
+    opts.add("opt_mf_hm_sem_hist");
+    opts.add("opt_mf_hm_not");
+
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_HG_PAPO");
+    ids.add("MF_HG_SEM_HIST");
+    ids.add("MF_HG_NOT");
+
+    insert(new Question("Q_MF_HM_SET","q_mf_hm_set","SINGLE",opts,ids));
+end
+
+rule "MF - hm did"
+when
+    UserAnswer(questionId == "Q_MF_HM_SET", selectedOptions contains "MF_HG_NOT")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_hm_did");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_HG_DID");
+
+    insert(new Question("Q_MF_HM_DID","q_mf_hm_did","SINGLE",opts,ids));
+end
+
+rule "MF - hm hist"
+when
+    UserAnswer(questionId == "Q_MF_HM_SET", selectedOptions contains "MF_HG_SEM_HIST")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_hm_renai");
+    opts.add("opt_mf_hm_mid_age");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_HG_REN");
+    ids.add("MF_HG_MID");
+
+    insert(new Question("Q_MF_HM_HIS","q_mf_hm_his","SINGLE",opts,ids));
+end
+
+rule "MF - hm no did "
+when
+    UserAnswer(questionId == "Q_MF_HM_DID", selectedOptions contains "MF_HG_DID")
+then
+    insert(new Recommendation("rec_runequest"));
+end
+
+rule "MF - hm postapo "
+when
+    UserAnswer(questionId == "Q_MF_HM_SET", selectedOptions contains "MF_HG_PAPO")
+then
+    insert(new Recommendation("rec_edawn"));
+end
+
+rule "MF - hm hist1"
+when
+    UserAnswer(questionId == "Q_MF_HM_HIS", selectedOptions contains "MF_HG_REN")
+then
+    insert(new Recommendation("rec_7sea"));
+end
+
+rule "MF - hm hist2"
+when
+    UserAnswer(questionId == "Q_MF_HM_HIS", selectedOptions contains "MF_HG_MID")
+then
+    insert(new Recommendation("rec_arsmag"));
+end
+
+rule "MF - low fantasy start"
+when
+    UserAnswer(questionId == "Q_MF_SUBGENRE", selectedOptions contains "MF_LOW")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_career_good");
+    opts.add("opt_mf_career_no");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_CAREER_GOOD");
+    ids.add("MF_CAREER_NO");
+
+    insert(new Question("Q_MF_CAREER","q_mf_career","SINGLE",opts,ids));
+end
+
+rule "MF - career path good"
+when
+    UserAnswer(questionId == "Q_MF_CAREER", selectedOptions contains "MF_CAREER_GOOD")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_dice_yes");
+    opts.add("opt_mf_dice_no");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_DICE_YES");
+    ids.add("MF_DICE_NO");
+
+    insert(new Question("Q_MF_DICE_POOLS","q_mf_dice_pools","SINGLE",opts,ids));
+end
+
+rule "MF - dice pools yes"
+when
+    UserAnswer(questionId == "Q_MF_DICE_POOLS", selectedOptions contains "MF_DICE_YES")
+then
+    insert(new Recommendation("rec_wfrp_2e"));
+end
+
+rule "MF - dice pools no"
+when
+    UserAnswer(questionId == "Q_MF_DICE_POOLS", selectedOptions contains "MF_DICE_NO")
+then
+    insert(new Recommendation("rec_wfrp_3e"));
+end
+
+rule "MF - career path no"
+when
+    UserAnswer(questionId == "Q_MF_CAREER", selectedOptions contains "MF_CAREER_NO")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_school_old");
+    opts.add("opt_mf_school_new");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_SCHOOL_OLD");
+    ids.add("MF_SCHOOL_NEW");
+
+    insert(new Question("Q_MF_OLD_NEW","q_mf_old_new","SINGLE",opts,ids));
+end
+
+rule "MF - old school"
+when
+    UserAnswer(questionId == "Q_MF_OLD_NEW", selectedOptions contains "MF_SCHOOL_OLD")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_slew_astrology");
+    opts.add("opt_mf_slew_not");
+    opts.add("opt_mf_slew_15");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_SLEW_ASTRO");
+    ids.add("MF_SLEW_NOT");
+    ids.add("MF_SLEW_15");
+
+    insert(new Question("Q_MF_SLEW","q_mf_slew","SINGLE",opts,ids));
+end
+
+rule "MF - slew astrology"
+when
+    UserAnswer(questionId == "Q_MF_SLEW", selectedOptions contains "MF_SLEW_ASTRO")
+then
+    insert(new Recommendation("rec_chivalry_sorcery"));
+end
+
+rule "MF - slew not really"
+when
+    UserAnswer(questionId == "Q_MF_SLEW", selectedOptions contains "MF_SLEW_NOT")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_mf_dyn_heraldry");
+    opts.add("opt_mf_dyn_dynasty");
+    opts.add("opt_mf_dyn_neither");
+
+    ArrayList ids = new ArrayList();
+    ids.add("MF_DYN_HERALDRY");
+    ids.add("MF_DYN_DYNASTY");
+    ids.add("MF_DYN_NEITHER");
+
+    insert(new Question("Q_MF_DYNASTY","q_mf_dynasty","MULTI",opts,ids));
+end
+
+rule "MF - heraldry"
+when
+    UserAnswer(questionId == "Q_MF_DYNASTY", selectedOptions contains "MF_DYN_HERALDRY")
+then
+    insert(new Recommendation("rec_soiaf"));
+end
+
+rule "MF - dynasty"
+when
+    UserAnswer(questionId == "Q_MF_DYNASTY", selectedOptions contains "MF_DYN_DYNASTY")
+then
+    insert(new Recommendation("rec_pendragon"));
+end
+
+rule "MF - neither dynasty nor heraldry"
+when
+    UserAnswer(questionId == "Q_MF_DYNASTY", selectedOptions contains "MF_DYN_NEITHER")
+then
+    insert(new Recommendation("rec_conan_tsr"));
+end
+
+rule "MF - slew 15 abilities"
+when
+    UserAnswer(questionId == "Q_MF_SLEW", selectedOptions contains "MF_SLEW_15")
+then
+    insert(new Recommendation("rec_harnmaster"));
+end
+
+rule "MF - new school"
+when
+    UserAnswer(questionId == "Q_MF_OLD_NEW", selectedOptions contains "MF_SCHOOL_NEW")
+then
+    insert(new Recommendation("rec_conan_mongoose"));
+end
+
+//FAR_FUTURE 
+//=============
+
+rule "FF- start"
+
+when
+
+    UserAnswer(questionId == "Q_GENRE", selectedOptions contains "FAR_FUTURE")
+
+then
+
+    ArrayList opts = new ArrayList();
+
+    opts.add("opt_ff_starg");
+
+    opts.add("opt_ff_oth");
+
+    opts.add("opt_ff_no");
+
+    opts.add("opt_ff_sw");
+
+    
+
+    ArrayList ids = new ArrayList();
+
+    ids.add("FF_STARG");
+
+    ids.add("FF_OTH");
+
+    ids.add("FF_NO");
+
+    ids.add("FF_SW");
+
+
+    insert(new Question("FF_TV", "q_ff_tv", "SINGLE", opts, ids));
+
+end
+
+
+
+
+rule "FF- tv other"
+
+when
+
+    UserAnswer(questionId == "FF_TV", selectedOptions contains "FF_OTH")
+
+then
+
+    insert(new Recommendation("rec_other"));
+
+end
+
+
+rule "FF- tv stargate"
+
+when
+
+    UserAnswer(questionId == "FF_TV", selectedOptions contains "FF_STARG")
+
+then
+
+    insert(new Recommendation("rec_fringe"));
+
+end
+
+
+
+rule "FF- star wars"
+
+when
+
+    UserAnswer(questionId == "FF_TV", selectedOptions contains "FF_SW")
+
+then
+
+    ArrayList opts = new ArrayList();
+
+    opts.add("opt_ff_sw_yes");
+
+    opts.add("opt_ff_sw_no");
+
+    
+
+    ArrayList ids = new ArrayList();
+
+    ids.add("SW_D6S_YES");
+
+    ids.add("SW_D6S_NO");
+
+
+    insert(new Question("Q_SW", "q_ff_sw", "SINGLE", opts, ids));
+
+end
+
+
+rule "FF- sw saga"
+
+when
+
+    UserAnswer(questionId == "Q_SW", selectedOptions contains "SW_D6S_NO")
+
+then
+
+    insert(new Recommendation("rec_sw_saga"));
+
+end
+
+
+rule "FF- sw d6"
+
+when
+
+    UserAnswer(questionId == "Q_SW", selectedOptions contains "SW_D6S_YES")
+
+then
+
+    insert(new Recommendation("rec_sw_d6"));
+
+end
+
+
+
+rule "FF-OPEN LICENSE"
+
+when
+
+    UserAnswer(questionId == "FF_TV", selectedOptions contains "FF_NO")
+
+then
+
+    ArrayList opts = new ArrayList();
+
+    opts.add("opt_ff_ol_yes");
+    opts.add("opt_ff_ol_no");
+    opts.add("opt_ff_ol_y_n");
+
+
+    ArrayList ids = new ArrayList();
+
+    ids.add("FF_OL_YES");
+    ids.add("FF_OL_NO");
+	ids.add("FF_OL_YES_NO");
+
+    insert(new Question("Q_FF_OPEN_LIC", "q_ff_op_lic", "SINGLE", opts, ids));
+
+end
+
+rule "FF yes open lincense"
+when
+    UserAnswer(questionId == "Q_FF_OPEN_LIC", selectedOptions contains "FF_OL_YES")
+then
+    insert(new Recommendation("rec_eclipse_phase"));
+end
+
+rule "FF yes-no open lincense"
+when
+    UserAnswer(questionId == "Q_FF_OPEN_LIC", selectedOptions contains "FF_OL_YES_NO")
+then
+    insert(new Recommendation("rec_traveller"));
+end
+
+rule "FF-derivative"
+
+when
+
+    UserAnswer(questionId == "Q_FF_OPEN_LIC", selectedOptions contains "FF_OL_NO")
+
+then
+
+    ArrayList opts = new ArrayList();
+
+    opts.add("opt_ff_deriv_yes");
+    opts.add("opt_ff_deriv_not");
+
+
+    ArrayList ids = new ArrayList();
+
+    ids.add("FF_DERIV_YES");
+    ids.add("FF_DERIV_NOT");
+
+    insert(new Question("Q_FF_DERIV", "q_ff_deriv", "SINGLE", opts, ids));
+
+end
+
+rule "FF-sub genre"
+
+when
+
+    UserAnswer(questionId == "Q_FF_DERIV", selectedOptions contains "FF_DERIV_NOT")
+
+then
+
+    ArrayList opts = new ArrayList();
+
+    opts.add("opt_ff_goth");
+    opts.add("opt_ff_space");
+    opts.add("opt_ff_papo");
+	opts.add("opt_ff_semi");
+
+    ArrayList ids = new ArrayList();
+
+    ids.add("FF_GOTH");
+    ids.add("FF_SPACE");
+	ids.add("FF_PAPO");
+	ids.add("FF_SEMI");
+    insert(new Question("Q_FF_SUBGEN", "q_ff_subgen", "SINGLE", opts, ids));
+
+end
+
+rule "FF subgenre goth"
+when
+    UserAnswer(questionId == "Q_FF_SUBGEN", selectedOptions contains "FF_GOTH")
+then
+    insert(new Recommendation("rec_warhammer"));
+end
+
+rule "FF subgenre space opera"
+when
+    UserAnswer(questionId == "Q_FF_SUBGEN", selectedOptions contains "FF_SPACE")
+then
+    insert(new Recommendation("rec_fad_suns"));
+end
+rule "FF subgenre post apo"
+when
+    UserAnswer(questionId == "Q_FF_SUBGEN", selectedOptions contains "FF_PAPO")
+then
+    insert(new Recommendation("rec_gu_fallout"));
+end
+rule "FF subgenre semi-gen"
+when
+    UserAnswer(questionId == "Q_FF_SUBGEN", selectedOptions contains "FF_SEMI")
+then
+    insert(new Recommendation("rec_gu_trashuman"));
+end
+
+rule "FF-derivative-YES"
+
+when
+    UserAnswer(questionId == "Q_FF_DERIV", selectedOptions contains "opt_ff_deriv_yes")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_ff_did_2e");
+    opts.add("opt_ff_did_3e");
+    opts.add("opt_ff_did_4e");
+    opts.add("opt_ff_old");
+
+    ArrayList ids = new ArrayList();
+    ids.add("FF_DID_2E");
+    ids.add("FF_DID_3E");
+    ids.add("FF_DID_4E");
+    ids.add("FF_DID_OLD");
+
+    insert(new Question("Q_FF_DND_ED","q_ff_dnd_ed","SINGLE",opts,ids));
+end
+
+rule "FF-DND-2E"
+
+when
+    UserAnswer(questionId == "Q_FF_DND_ED", selectedOptions contains "FF_DID_2E")
+then
+    insert(new Recommendation("rec_alternity"));
+end
+
+rule "FF-DND-4E"
+
+when
+    UserAnswer(questionId == "Q_FF_DND_ED", selectedOptions contains "FF_DID_4E")
+then
+    insert(new Recommendation("rec_gamma_world"));
+end
+
+
+rule "FF-DND-3E"
+
+when
+    UserAnswer(questionId == "Q_FF_DND_ED", selectedOptions contains "FF_DID_3E")
+then
+    insert(new Recommendation("rec_d20_future"));
+end
+
+
+rule "FF-DID oldschool"
+
+when
+    UserAnswer(questionId == "Q_FF_DND_ED", selectedOptions contains "FF_DID_OLD")
+then
+    ArrayList opts = new ArrayList();
+    opts.add("opt_ff_did_sci_fan");
+    opts.add("opt_ff_did_sci_fi");
+
+    ArrayList ids = new ArrayList();
+    ids.add("FF_DID_SCI_FAN");
+    ids.add("FF_DID_SCI_FI");
+
+    insert(new Question("Q_FF_DND_SCI","q_ff_dnd_sci","SINGLE",opts,ids));
+end
+
+
+rule "FF-scifi"
+
+when
+    UserAnswer(questionId == "Q_FF_DND_SCI", selectedOptions contains "FF_DID_SCI_FI")
+then
+    insert(new Recommendation("rec_st_fronties"));
+end
+
+rule "FF-scifan"
+
+when
+    UserAnswer(questionId == "Q_FF_DND_SCI", selectedOptions contains "FF_DID_SCI_FAN")
+then
+    insert(new Recommendation("rec_meta_alpha"));
+end
+
+//NEAR PRESTENT
+//===============
 
 rule "NP - Undead"
 when
