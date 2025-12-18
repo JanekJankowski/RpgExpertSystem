@@ -4,11 +4,11 @@ import java.util.List
 import java.util.ArrayList
 
 declare Question
-    id : String				// ID pytania dla regu�
+    id : String				// ID pytania dla regul
     textKey : String		// pytanie z JSON
     type : String			// "SINGLE" lub "MULTI" (radio vs checkbox)
     options : List			// odpowiedz z JSON
-    optionIds : List		// ID odpowiedzi dla regu�
+    optionIds : List		// ID odpowiedzi dla regul
 end
 
 declare UserAnswer
@@ -20,7 +20,7 @@ declare Recommendation
     systemKey : String		// rekomendacja z JSON
 end
 
-// --- REGU�Y ---
+// --- REGULY ---
 
 rule "Init - Start Process"
 when
@@ -46,7 +46,7 @@ then
 end
 
 // =========================================
-// �CIE�KA: SUPERS
+//  SUPERS
 // =========================================
 
 rule "Supers - start"
@@ -66,7 +66,7 @@ then
 end
 
 // =========================================
-// �CIE�KA: Marvel COMICS
+//  Marvel COMICS
 // =========================================
 
 rule "Supers - Marvel"
@@ -107,7 +107,7 @@ then
 end
 
 // =========================================
-// �CIE�KA: DC COMICS
+// DC COMICS
 // =========================================
 
 rule "Supers - DC Start"
@@ -150,7 +150,7 @@ end
 
 
 // =========================================
-// �CIE�KA: INNE / W�ASNE (NO / OTHER)
+//  INNE / WLASNE (NO / OTHER)
 // =========================================
 
 rule "Supers - Other Start"
@@ -228,7 +228,7 @@ then
 end
 
 // =========================================
-// �CIE�KA: ALT HISTORY
+// ALT HISTORY
 // =========================================
 
 rule "AH - start"
@@ -334,7 +334,7 @@ then
 end
 
 // =========================================
-// �CIE�KA: Genre Shoudn't Matter
+// Genre Shoudn't Matter
 // =========================================
 
 rule "Genre Doesn't Matter - start"
@@ -577,9 +577,9 @@ when
 then
     insert(new Recommendation("rec_fudge"));
 end
-
+//===========================
 //MEDIEVAL FANTASY
-//=================
+//============================
 
 
 rule "MF - start"
@@ -1205,8 +1205,11 @@ then
     insert(new Recommendation("rec_conan_mongoose"));
 end
 
+
+//=====================
 //FAR_FUTURE 
-//=============
+//=====================
+
 
 rule "FF- start"
 
@@ -1520,8 +1523,12 @@ then
     insert(new Recommendation("rec_meta_alpha"));
 end
 
+
+//=====================
 //NEAR PRESTENT
-//===============
+//=====================
+
+
 
 rule "NP - Undead"
 when
